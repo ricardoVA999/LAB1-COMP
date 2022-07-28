@@ -1,0 +1,4 @@
+class Main  {
+      uno: String <- "Hola mundo";
+      main() : String { x };
+  };
