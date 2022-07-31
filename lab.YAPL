@@ -1,0 +1,12 @@
+class Silly {
+      copy() : SELF_TYPE { self };
+};
+
+class Sally inherits Silly {
+    hello(a:String) : String { self };
+};
+
+class  Main  {
+    x : Sally <- (new Sally).copy();
+    main() : Sally { x };
+};

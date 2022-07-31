@@ -2,38 +2,20 @@ from prettytable import PrettyTable
 
 class TablaSimbolos():
     def __init__(self):
-        self.my_table = PrettyTable()
-        self.symbols = []
-        self.off = 0
+        self.symb_table = []
 
-    def Add(self, tipo, id, size, off, isParameter):
-        self.symbols.append({
-            'Tipo': tipo,
-            'Id': id,
-            'Size': size,
-            'Offset': off,
-            'IsParameter': isParameter
-        })
+    def add_symb(self, name, type, scope):
+        if(self.find_symb(name) == -1):
+            return self.symb_table.append((name, type, scope))
 
-        self.off += size
-
-    def LookUp(self, variable):
-        symbols_copy = self.symbols.copy()
-        symbols_copy.reverse()
-        for symbol in symbols_copy:
-            if symbol['Id'] == variable:
+    def find_symb(self, name):
+        for symbol in self.symb_table:
+            if name == symbol[0]:
                 return symbol
+        return -1
 
-        return 0
-    
-    def GetSize(self):
-        return sum(symbol['Size'] for symbol in self.symbols)
-
-    def ToTable(self):
-        self.my_table.field_names = ['Tipo', 'ID', 'Size', 'Offset', 'IsParameter']
-        for i in self.symbols:
-            self.my_table.add_row(list(i.values()))
-
-        print("My symbols table:")
-        print(self.my_table)
-        self.my_table.clear_rows()
+    def print_table(self):
+        table = PrettyTable(['Nombre', 'Tipo', 'Ambiente'])
+        for symbol in self.symb_table:
+            table.add_row([symbol[0], symbol[1], symbol[2]])
+        print(table)

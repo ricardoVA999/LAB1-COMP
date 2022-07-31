@@ -52,13 +52,10 @@ ASIGN           : '<-';
 
 // Basic expresions
 
-TYPE_ID         : CAP OBJ_ID;
-OBJ_ID          : ALPHA ALPHA_NUM*; // for variable name
-ALPHA           : [a-zA-Z_];
+TYPE_ID         : [A-Z] ([a-zA-Z0-9_])*;
+OBJ_ID          : [a-zA-Z] ([a-zA-Z0-9_])*;  // for variable name
 INTEGER         : [0-9]+;
 DIGIT           : [0-9];
-CAP             : [A-Z_];
-ALPHA_NUM       : ALPHA | DIGIT;
 STRING_LIT      : '"' ( '\\' [btnfr"'\\] | ~[\r\n\\"] )* '"'; // obtained from documentation
 BOOL_LIT        : TRUE | FALSE;
 COMMENT         : '--' .*? '\n' -> skip; // skip comment line starting with --
@@ -73,32 +70,33 @@ class           : CLASS var_type (INHERITS var_type)? LBRACE (feature)* RBRACE;
 feature         : var_id LPAR (formal (COMMA formal)*)? RPAR COLON var_type LBRACE expr RBRACE SEMICOLON
                 | var_id COLON var_type (ASIGN expr)? SEMICOLON;
 formal          : var_id COLON var_type;
-expr            : var_id ASIGN expr
-                | expr (AT var_type)? DOT var_id LPAR (expr (COMMA expr)*)? RPAR
-                | var_id LPAR (expr (COMMA expr)*)? LPAR
-                | IF expr THEN expr ELSE expr FI
-                | WHILE expr LOOP expr POOL
-                | LBRACKET (expr SEMICOLON)+ RBRACKET
-                | LET var_id COLON var_type (ASIGN expr)? (COMMA var_id COLON var_type (ASIGN expr)?)* IN expr
-                | NEW var_type
-                | ISVOID expr
-                | expr ADD expr
-                | expr SUB expr
-                | expr MULTIPLY expr
-                | expr DIVIDE expr
-                | NEGATION expr
-                | expr LESS_OP expr
-                | expr LESS_EQ_OP expr
-                | expr EQUAL_OP expr
-                | NOT expr
-                | LPAR expr RPAR
-                | var_id
-                | INTEGER
-                | STRING_LIT
-                | TRUE
-                | FALSE;
+expr            : var_id ASIGN expr                                                                                 # assign_expr
+                | expr (AT var_type)? DOT var_id LPAR (expr (COMMA expr)*)? RPAR                                    # expr_expr
+                | var_id LPAR (expr (COMMA expr)*)? RPAR                                                            # call_expr      
+                | IF expr THEN expr ELSE expr FI                                                                    # conditional_expr
+                | WHILE expr LOOP expr POOL                                                                         # loop_expr                           
+                | LBRACE (expr SEMICOLON)+ RBRACE                                                                   # br_expr                               
+                | LET var_id COLON var_type (ASIGN expr)? (COMMA var_id COLON var_type (ASIGN expr)?)* IN expr      # let_expr
+                | NEW var_type                                                                                      # new_expr                           
+                | ISVOID expr                                                                                       # void_expr
+                | expr ADD expr                                                                                     # add_expr
+                | expr SUB expr                                                                                     # sub_expr                                           
+                | expr MULTIPLY expr                                                                                # mul_expr                       
+                | expr DIVIDE expr                                                                                  # div_expr                      
+                | NEGATION expr                                                                                     # neg_expr                                                                                   
+                | expr LESS_OP expr                                                                                 # less_expr
+                | expr LESS_EQ_OP expr                                                                              # lessEq_expr
+                | expr EQUAL_OP expr                                                                                # eq_expr
+                | NOT expr                                                                                          # not_expr                                
+                | LPAR expr RPAR                                                                                    # par_expr
+                | var_id                                                                                            # var_expr                                           
+                | INTEGER                                                                                           # int_expr
+                | STRING_LIT                                                                                        # string_expr
+                | TRUE                                                                                              # true_expr
+                | FALSE                                                                                             # false_expr
+                ;
 
-var_type        : INT | BOOL | STRING | TYPE_ID | SELF_TYPE;
+var_type        : INT | BOOL | STRING | TYPE_ID | VOID | SELF_TYPE;
 var_id          : OBJ_ID | SELF;
 
 ERR_TOKEN : . ;
