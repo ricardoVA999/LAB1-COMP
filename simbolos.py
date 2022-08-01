@@ -6,7 +6,7 @@ class TablaSimbolos():
 
     def add_symb(self, name, type, scope):
         if(self.find_symb(name) == -1):
-            return self.symb_table.append((name, type, scope))
+            self.symb_table.append((name, type, scope))
 
     def find_symb(self, name):
         for symbol in self.symb_table:

@@ -71,7 +71,7 @@ def getError(tks):
     return tks != YAPLLexer.ERR_TOKEN
 
 contentHasErr = False
-filename = "antlr/aritmetica.yapl"
+filename = "antlr/lab.yapl"
 print(f'Parsing file: {filename}')
 
 inputStream = FileStream(filename)

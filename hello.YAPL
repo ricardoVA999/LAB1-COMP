@@ -1,13 +1,3 @@
 class Main  {
       x: String <- "Hola mundo";
-      a: Int <- 4;
-      b: Int <- 5;
-      c: Int <- 14;
-      d: Int <- 100;
-      main() : void {{
-         a + b;
-         c - a;
-         b * c;
-         d / b;
-      }};
-};
+  };
